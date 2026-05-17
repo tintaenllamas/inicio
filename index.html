@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tinta en Llamas — Colectivo Literario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+/* ── VARIABLES & RESET ── */
+:root {
+  --black: #0a0a0a;
+  --white: #f5f0e8;
+  --cream: #ede6d6;
+  --ember: #c44b25;
+  --ember-light: #e8693f;
+  --ember-glow: #ff6b35;
+  --ash: #2a2a2a;
+  --smoke: #6b6560;
+  --paper: #faf6ee;
+  --ink: #1a1714;
+  --gold: #b8943e;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --space-xs: 0.5rem; --space-sm: 1rem; --space-md: 2rem; --space-lg: 4rem; --space-xl: 8rem;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:80px; }
+body { font-family:var(--font-body); background:var(--black); color:var(--white); line-height:1.7; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+img { max-width:100%; display:block; }
+
+/* ── NAV ── */
+#main-nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 2.5rem;
+  background:rgba(10,10,10,0.88); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,75,37,0.15);
+}
+.nav-brand { display:flex; align-items:center; gap:0.6rem; }
+.brand-icon { font-size:1.4rem; }
+.brand-name { font-family:var(--font-display); font-weight:700; font-size:1.1rem; letter-spacing:0.03em; }
+.nav-links { display:flex; list-style:none; gap:2rem; align-items:center; }
+.nav-links a {
+  font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--smoke); transition:color 0.3s; position:relative;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--ember-glow); }
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:1px; background:var(--ember); transition:width 0.3s;
+}
+.nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+.nav-admin {
+  background:rgba(196,75,37,0.15); padding:0.35rem 0.8rem !important;
+  border-radius:4px; border:1px solid rgba(196,75,37,0.3);
+}
+.nav-toggle { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+.nav-toggle span { display:block; width:24px; height:2px; background:var(--white); transition:0.3s; }
+
+/* ── HERO ── */
+.hero {
+  position:relative; min-height:100vh; display:flex;
+  align-items:center; justify-content:center; text-align:center; overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(196,75,37,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(184,148,62,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(10,10,10,1) 0%, var(--black) 100%);
+}
+.hero-bg::before {
+  content:''; position:absolute; inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+.hero-content { position:relative; z-index:2; padding:var(--space-md); }
+.hero-tagline {
+  font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.25em;
+  text-transform:uppercase; color:var(--ember); margin-bottom:var(--space-sm);
+  animation:fadeUp 0.8s ease-out;
+}
+.hero-title {
+  font-family:var(--font-display); font-size:clamp(3.5rem,10vw,9rem);
+  font-weight:900; line-height:0.95; margin-bottom:var(--space-md);
+  animation:fadeUp 0.8s ease-out 0.15s both;
+}
+.hero-title em {
+  font-style:italic; color:var(--ember);
+  text-shadow:0 0 60px rgba(196,75,37,0.3);
+}
+.hero-desc {
+  font-size:1.15rem; color:var(--smoke); max-width:420px;
+  margin:0 auto var(--space-md); font-weight:300;
+  animation:fadeUp 0.8s ease-out 0.3s both;
+}
+.hero-cta {
+  display:inline-block; font-family:var(--font-mono); font-size:0.8rem;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--ember-glow);
+  border:1px solid var(--ember); padding:0.8rem 2rem; transition:all 0.3s;
+  animation:fadeUp 0.8s ease-out 0.45s both;
+}
+.hero-cta:hover { background:var(--ember); color:var(--white); box-shadow:0 0 30px rgba(196,75,37,0.3); }
+.hero-scroll {
+  position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  animation:fadeUp 0.8s ease-out 0.6s both;
+}
+.hero-scroll span { font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--smoke); }
+.scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,var(--ember),transparent); animation:scrollPulse 2s ease-in-out infinite; }
+
+/* ── SECCIONES ── */
+.section { padding:var(--space-xl) var(--space-md); position:relative; }
+.section--dark { background:var(--ash); }
+.section-header { margin-bottom:var(--space-lg); max-width:800px; }
+.section-number { font-family:var(--font-mono); font-size:0.7rem; color:var(--ember); letter-spacing:0.15em; display:block; margin-bottom:var(--space-xs); }
+.section-header h2 { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.5rem); font-weight:900; line-height:1.1; margin-bottom:var(--space-xs); }
+.section-subtitle { font-size:1rem; color:var(--smoke); font-weight:300; }
+
+/* ── CUENTOS ── */
+.cuentos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:var(--space-md); max-width:1200px; }
+.cuento-card {
+  background:var(--ash); border:1px solid rgba(245,240,232,0.06);
+  padding:var(--space-md); cursor:pointer; transition:all 0.4s;
+  position:relative; overflow:hidden;
+}
+.cuento-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:var(--ember); transition:height 0.4s; }
+.cuento-card:hover { border-color:rgba(196,75,37,0.3); transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+.cuento-card:hover::before { height:100%; }
+.cuento-tag { font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--ember); margin-bottom:var(--space-sm); display:inline-block; }
+.cuento-card h3 { font-family:var(--font-display); font-size:1.4rem; font-weight:700; margin-bottom:0.5rem; line-height:1.3; }
+.cuento-author { font-family:var(--font-mono); font-size:0.7rem; color:var(--smoke); letter-spacing:0.05em; margin-bottom:var(--space-sm); display:block; }
+.cuento-excerpt { font-size:0.95rem; color:var(--smoke); font-weight:300; line-height:1.6; }
+.cuento-read { display:inline-block; margin-top:var(--space-sm); font-family:var(--font-mono); font-size:0.7rem; color:var(--ember-light); letter-spacing:0.1em; text-transform:uppercase; }
+
+/* ── GALERÍA ── */
+.galeria-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:var(--space-sm); max-width:1200px; }
+.galeria-item { position:relative; aspect-ratio:4/3; overflow:hidden; cursor:pointer; border:1px solid rgba(245,240,232,0.06); }
+.galeria-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s,filter 0.4s; }
+.galeria-item:hover img { transform:scale(1.08); filter:brightness(0.7); }
+.galeria-caption {
+  position:absolute; bottom:0; left:0; right:0; padding:var(--space-sm);
+  background:linear-gradient(transparent,rgba(10,10,10,0.9));
+  font-family:var(--font-mono); font-size:0.7rem; color:var(--cream); letter-spacing:0.05em;
+  transform:translateY(100%); transition:transform 0.4s;
+}
+.galeria-item:hover .galeria-caption { transform:translateY(0); }
+
+/* ── LIBROS ── */
+.libros-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:var(--space-md); max-width:1200px; }
+.libro-card {
+  display:grid; grid-template-columns:140px 1fr; gap:var(--space-md);
+  background:var(--ash); border:1px solid rgba(245,240,232,0.06);
+  padding:var(--space-md); transition:all 0.4s;
+}
+.libro-card:hover { border-color:rgba(184,148,62,0.3); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+.libro-portada { aspect-ratio:2/3; overflow:hidden; background:var(--black); display:flex; align-items:center; justify-content:center; }
+.libro-portada img { width:100%; height:100%; object-fit:cover; }
+.libro-portada-placeholder { font-family:var(--font-display); font-size:0.9rem; color:var(--smoke); text-align:center; padding:1rem; }
+.libro-info h3 { font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin-bottom:0.3rem; line-height:1.3; }
+.libro-autor { font-family:var(--font-mono); font-size:0.7rem; color:var(--smoke); letter-spacing:0.05em; margin-bottom:var(--space-sm); display:block; }
+.libro-sinopsis { font-size:0.9rem; color:var(--smoke); font-weight:300; line-height:1.5; margin-bottom:var(--space-sm); }
+.libro-precio { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--gold); margin-bottom:var(--space-sm); }
+.libro-comprar {
+  display:inline-block; font-family:var(--font-mono); font-size:0.7rem;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--white);
+  background:var(--ember); padding:0.6rem 1.4rem; border:none; cursor:pointer; transition:all 0.3s;
+}
+.libro-comprar:hover { background:var(--ember-light); box-shadow:0 4px 20px rgba(196,75,37,0.3); }
+
+/* ── NOSOTROS ── */
+.nosotros-content { display:grid; grid-template-columns:2fr 1fr; gap:var(--space-lg); max-width:900px; }
+.nosotros-text p { margin-bottom:var(--space-sm); font-size:1.05rem; font-weight:300; color:var(--cream); }
+.nosotros-contacto h3 { font-family:var(--font-display); font-size:1.2rem; margin-bottom:var(--space-sm); }
+.nosotros-contacto p { font-family:var(--font-mono); font-size:0.8rem; color:var(--smoke); margin-bottom:var(--space-sm); }
+.social-links { display:flex; gap:var(--space-sm); }
+.social-links a { font-family:var(--font-mono); font-size:0.75rem; color:var(--smoke); border:1px solid rgba(245,240,232,0.1); padding:0.4rem 0.8rem; transition:all 0.3s; }
+.social-links a:hover { color:var(--ember-glow); border-color:var(--ember); }
+
+/* ── FOOTER ── */
+.footer { text-align:center; padding:var(--space-md); font-family:var(--font-mono); font-size:0.7rem; color:var(--smoke); letter-spacing:0.05em; border-top:1px solid rgba(245,240,232,0.06); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(10,10,10,0.95); z-index:2000;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:var(--space-lg) var(--space-md); overflow-y:auto;
+  opacity:0; pointer-events:none; transition:opacity 0.4s;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal { background:var(--paper); color:var(--ink); max-width:680px; width:100%; padding:var(--space-lg); position:relative; transform:translateY(30px); transition:transform 0.4s; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal-close { position:absolute; top:1rem; right:1.2rem; background:none; border:none; font-size:1.5rem; color:var(--smoke); cursor:pointer; transition:color 0.3s; z-index:10; }
+.modal-close:hover { color:var(--ember); }
+.modal-body h2 { font-family:var(--font-display); font-size:2rem; font-weight:900; color:var(--ink); margin-bottom:0.3rem; line-height:1.2; }
+.modal-body .modal-author { font-family:var(--font-mono); font-size:0.75rem; color:var(--smoke); letter-spacing:0.08em; margin-bottom:var(--space-md); display:block; }
+.modal-body .cuento-full p { font-size:1.05rem; line-height:1.85; margin-bottom:1.2rem; color:var(--ink); text-align:justify; }
+
+/* ── LIGHTBOX ── */
+.lightbox { position:fixed; inset:0; background:rgba(10,10,10,0.97); z-index:2000; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.4s; }
+.lightbox.open { opacity:1; pointer-events:all; }
+.lightbox-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; font-size:1.8rem; color:var(--white); cursor:pointer; }
+.lightbox img { max-width:90vw; max-height:80vh; object-fit:contain; }
+.lightbox-caption { margin-top:var(--space-sm); font-family:var(--font-mono); font-size:0.8rem; color:var(--smoke); }
+
+/* ── EMPTY ── */
+.empty-state { font-family:var(--font-mono); font-size:0.85rem; color:var(--smoke); padding:var(--space-md); border:1px dashed rgba(245,240,232,0.15); max-width:500px; }
+.empty-state a { color:var(--ember-light); text-decoration:underline; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes scrollPulse { 0%,100% { opacity:0.3; } 50% { opacity:1; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+  #main-nav { padding:0.8rem 1.2rem; }
+  .nav-toggle { display:flex; }
+  .nav-links {
+    position:fixed; top:0; right:-100%; width:260px; height:100vh;
+    background:var(--black); flex-direction:column; padding:5rem 2rem 2rem;
+    gap:1.5rem; transition:right 0.4s; border-left:1px solid rgba(196,75,37,0.15);
+  }
+  .nav-links.open { right:0; }
+  .section { padding:var(--space-lg) var(--space-sm); }
+  .cuentos-grid, .galeria-grid, .libros-grid { grid-template-columns:1fr; }
+  .libro-card { grid-template-columns:100px 1fr; gap:var(--space-sm); }
+  .nosotros-content { grid-template-columns:1fr; gap:var(--space-md); }
+  .modal { padding:var(--space-md); }
+  .hero-title { font-size:clamp(2.5rem,12vw,5rem); }
+}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="nav-brand">
+      <span class="brand-icon">🔥</span>
+      <span class="brand-name">Tinta en Llamas</span>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inicio" class="active">Inicio</a></li>
+      <li><a href="#cuentos">Cuentos</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#libros">Libros</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="admin.html" class="nav-admin">Panel</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header id="inicio" class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-tagline">Colectivo Literario</p>
+      <h1 class="hero-title">Tinta en<br><em>Llamas</em></h1>
+      <p class="hero-desc">Donde las palabras arden y las historias permanecen.</p>
+      <a href="#cuentos" class="hero-cta">Leer cuentos →</a>
+    </div>
+    <div class="hero-scroll">
+      <span>Desplaza</span>
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- CUENTOS -->
+  <section id="cuentos" class="section">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2>Cuentos</h2>
+      <p class="section-subtitle">Narrativa breve de nuestros autores</p>
+    </div>
+    <div class="cuentos-grid" id="cuentosGrid"></div>
+    <p class="empty-state" id="cuentosEmpty" style="display:none;">Aún no hay cuentos publicados. Usa el <a href="admin.html">Panel</a> para agregar el primero.</p>
+  </section>
+
+  <!-- GALERÍA -->
+  <section id="galeria" class="section section--dark">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2>Galería</h2>
+      <p class="section-subtitle">Momentos del colectivo</p>
+    </div>
+    <div class="galeria-grid" id="galeriaGrid"></div>
+    <p class="empty-state" id="galeriaEmpty" style="display:none;">Aún no hay imágenes.</p>
+  </section>
+
+  <!-- LIBROS -->
+  <section id="libros" class="section">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2>Nuestros Libros</h2>
+      <p class="section-subtitle">Obras publicadas por el colectivo</p>
+    </div>
+    <div class="libros-grid" id="librosGrid"></div>
+    <p class="empty-state" id="librosEmpty" style="display:none;">Aún no hay libros registrados.</p>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros" class="section section--dark">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2>Nosotros</h2>
+    </div>
+    <div class="nosotros-content">
+      <div class="nosotros-text">
+        <p><strong>Tinta en Llamas</strong> es un colectivo literario dedicado a la creación, difusión y celebración de la narrativa breve. Creemos que un buen cuento puede incendiar la imaginación y dejar marcas que no se borran.</p>
+        <p>Reunimos voces diversas bajo un mismo fuego: el de la palabra escrita con honestidad, precisión y sin concesiones.</p>
+      </div>
+      <div class="nosotros-contacto">
+        <h3>Contacto</h3>
+        <p>tintaenllamas@correo.com</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">X</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Tinta en Llamas — Colectivo Literario</p>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <article class="modal-body" id="modalBody"></article>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img id="lightboxImg" src="" alt="">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+
+  <script>
+  /* ================================================
+     DATOS EMBEBIDOS (fallback cuando no hay servidor)
+     Para actualizar: edita data/*.json y sube a GitHub,
+     O edita directamente estos arrays.
+     ================================================ */
+
+  const EMBEDDED_CUENTOS = [
+    {
+      "id":"1",
+      "titulo":"La ventana cerrada",
+      "autor":"Miembro del colectivo",
+      "extracto":"Desde aquella tarde, Marcos no volvió a abrir la ventana. No por miedo al frío, sino porque lo que vio afuera ya no tenía remedio.",
+      "texto":"Desde aquella tarde, Marcos no volvió a abrir la ventana. No por miedo al frío, sino porque lo que vio afuera ya no tenía remedio.\n\nHabía sido un martes cualquiera. El tipo de martes que no merece recordarse. Marcos preparaba café cuando escuchó los gritos. Se asomó, como se asoman todos: con la curiosidad intacta y la voluntad de ayudar ya oxidada.\n\nEn la vereda de enfrente, un hombre arrastraba una maleta demasiado pesada. Una mujer corría detrás gritando un nombre que el viento deformaba. Marcos pensó en bajar. Pensó en intervenir. Pensó, sobre todo, en que el café se iba a enfriar.\n\nCuando volvió a mirar, la calle estaba vacía. Solo quedaba la maleta, abierta, con ropa de niño adentro.\n\nMarcos cerró la ventana. Tomó su café. No le supo a nada.",
+      "etiqueta":"Destacado"
+    },
+    {
+      "id":"2",
+      "titulo":"Instrucciones para perder un nombre",
+      "autor":"Miembro del colectivo",
+      "extracto":"Primero, deje de presentarse. Cuando alguien pregunte cómo se llama, sonría y cambie de tema.",
+      "texto":"Primero, deje de presentarse. Cuando alguien pregunte cómo se llama, sonría y cambie de tema. Si insisten, diga cualquier nombre. Uno distinto cada vez. Al cabo de unas semanas, notará que ninguno le queda.\n\nSegundo, evite los espejos. No por vanidad, sino porque el reflejo todavía recuerda. Los espejos son traidores: le devolverán una cara que ya no le pertenece, y con ella, el nombre que intenta abandonar.\n\nTercero, no vuelva a su barrio. Las calles tienen memoria. Las veredas, las esquinas, el kiosco donde compraba cigarrillos: todo eso sabe quién fue usted. Y se lo va a recordar.\n\nCuarto, tenga paciencia. Perder un nombre toma tiempo. Más que ganarlo. Usted no eligió llamarse como se llama, pero dejar de serlo es una decisión que exige constancia.\n\nQuinto y último: cuando finalmente lo logre, cuando nadie en el mundo sepa cómo llamarlo, descubrirá que tampoco usted lo sabe. Y entonces, solo entonces, será libre.\n\nO eso dicen.",
+      "etiqueta":""
+    }
+  ];
+
+  const EMBEDDED_GALERIA = [
+    {"id":"1","url":"https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600","caption":"Sesión de lectura — Encuentro mensual del colectivo"},
+    {"id":"2","url":"https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600","caption":"Biblioteca del colectivo"},
+    {"id":"3","url":"https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600","caption":"Taller de escritura creativa"}
+  ];
+
+  const EMBEDDED_LIBROS = [
+    {
+      "id":"1",
+      "titulo":"Cenizas de tinta",
+      "autor":"Colectivo Tinta en Llamas",
+      "sinopsis":"Antología de cuentos breves escritos por los miembros fundadores del colectivo. Diecisiete historias que exploran los bordes de lo cotidiano.",
+      "portada":"https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+      "precio":"S/ 35.00",
+      "enlace":"https://wa.me/51999999999?text=Quiero%20comprar%20Cenizas%20de%20tinta"
+    }
+  ];
+
+  /* ================================================
+     APP
+     ================================================ */
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Nav móvil
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Active link al scroll
+    const sections = document.querySelectorAll('.section, .hero');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      navAnchors.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    });
+
+    // Cargar datos: intenta fetch primero (GitHub Pages), fallback a embebidos
+    loadData('data/cuentos.json', EMBEDDED_CUENTOS, renderCuentos, 'cuentosEmpty');
+    loadData('data/galeria.json', EMBEDDED_GALERIA, renderGaleria, 'galeriaEmpty');
+    loadData('data/libros.json', EMBEDDED_LIBROS, renderLibros, 'librosEmpty');
+
+    // Modal
+    const modalOverlay = document.getElementById('modalOverlay');
+    document.getElementById('modalClose').addEventListener('click', () => modalOverlay.classList.remove('open'));
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { modalOverlay.classList.remove('open'); lightbox.classList.remove('open'); }
+    });
+  });
+
+  async function loadData(url, fallback, renderFn, emptyId) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('not found');
+      const data = await res.json();
+      if (data.length) renderFn(data); else document.getElementById(emptyId).style.display = 'block';
+    } catch {
+      // Fallback: usar datos embebidos
+      if (fallback.length) renderFn(fallback);
+      else document.getElementById(emptyId).style.display = 'block';
+    }
+  }
+
+  function renderCuentos(cuentos) {
+    const grid = document.getElementById('cuentosGrid');
+    document.getElementById('cuentosEmpty').style.display = 'none';
+    grid.innerHTML = cuentos.map((c, i) => `
+      <div class="cuento-card" data-index="${i}">
+        ${c.etiqueta ? `<span class="cuento-tag">${esc(c.etiqueta)}</span>` : ''}
+        <h3>${esc(c.titulo)}</h3>
+        <span class="cuento-author">${esc(c.autor)}</span>
+        <p class="cuento-excerpt">${esc(c.extracto)}</p>
+        <span class="cuento-read">Leer →</span>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.cuento-card').forEach(card => {
+      card.addEventListener('click', () => openCuento(cuentos[parseInt(card.dataset.index)]));
+    });
+  }
+
+  function openCuento(c) {
+    const body = document.getElementById('modalBody');
+    const pars = c.texto.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    body.innerHTML = `
+      <h2>${esc(c.titulo)}</h2>
+      <span class="modal-author">${esc(c.autor)}</span>
+      <div class="cuento-full">${pars.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function renderGaleria(imgs) {
+    const grid = document.getElementById('galeriaGrid');
+    document.getElementById('galeriaEmpty').style.display = 'none';
+    grid.innerHTML = imgs.map(img => `
+      <div class="galeria-item" data-src="${esc(img.url)}" data-caption="${esc(img.caption || '')}">
+        <img src="${esc(img.url)}" alt="${esc(img.caption || 'Imagen')}" loading="lazy">
+        ${img.caption ? `<div class="galeria-caption">${esc(img.caption)}</div>` : ''}
+      </div>
+    `).join('');
+    grid.querySelectorAll('.galeria-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById('lightboxImg').src = item.dataset.src;
+        document.getElementById('lightboxCaption').textContent = item.dataset.caption;
+        document.getElementById('lightbox').classList.add('open');
+      });
+    });
+  }
+
+  function renderLibros(libros) {
+    const grid = document.getElementById('librosGrid');
+    document.getElementById('librosEmpty').style.display = 'none';
+    grid.innerHTML = libros.map(libro => `
+      <div class="libro-card">
+        <div class="libro-portada">
+          ${libro.portada
+            ? `<img src="${esc(libro.portada)}" alt="Portada de ${esc(libro.titulo)}" loading="lazy">`
+            : `<div class="libro-portada-placeholder">${esc(libro.titulo)}</div>`}
+        </div>
+        <div class="libro-info">
+          <h3>${esc(libro.titulo)}</h3>
+          <span class="libro-autor">${esc(libro.autor)}</span>
+          ${libro.sinopsis ? `<p class="libro-sinopsis">${esc(libro.sinopsis)}</p>` : ''}
+          ${libro.precio ? `<div class="libro-precio">${esc(libro.precio)}</div>` : ''}
+          ${libro.enlace ? `<a href="${esc(libro.enlace)}" target="_blank" rel="noopener" class="libro-comprar">Comprar →</a>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+  </script>
+</body>
+</html>
